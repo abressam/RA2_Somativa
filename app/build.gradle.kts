@@ -72,7 +72,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation ("androidx.compose.material:material-icons-extended:1.4.0")
+    implementation ("androidx.compose.material:material-icons-extended:1.6.7")
 
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
@@ -85,10 +85,18 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 
     // viewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.1")
     implementation("androidx.activity:activity-ktx:1.9.0")
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.1.0")
+
+    // Animation
+    implementation("androidx.compose.animation:animation:1.6.7")
+    implementation("androidx.compose.ui:ui:1.6.7")
+
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+
 }

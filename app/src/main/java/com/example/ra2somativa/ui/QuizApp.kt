@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.example.ra2somativa.feature.data.model.Player
 import com.example.ra2somativa.feature.data.model.QuestionData
 import kotlinx.coroutines.delay
 
@@ -15,7 +16,7 @@ fun QuizApp() {
     var questions by remember { mutableStateOf(QuestionData().loadQuestions()) }
     var currentQuestionIndex by remember { mutableIntStateOf(0) }
     var showResult by remember { mutableStateOf(false) }
-    var timer by remember { mutableIntStateOf(15) }
+    var timer by remember { mutableIntStateOf(10) }
     var showIntermediateScreen by remember { mutableStateOf(false) }
     var intermediateTimer by remember { mutableIntStateOf(3) }
     var wasAnswerCorrect by remember { mutableStateOf(false) }
@@ -31,7 +32,7 @@ fun QuizApp() {
         questions = QuestionData().loadQuestions().shuffled().map { it.randomizeOptions() }
         currentQuestionIndex = 0
         totalScore = 0
-        timer = 15
+        timer = 10
         showResult = false
         showIntermediateScreen = false
         intermediateTimer = 3
@@ -59,9 +60,9 @@ fun QuizApp() {
     }
 
     if (showResult) {
-        ResultScreen(totalScore) {
+        ResultScreen(onRestart = {
             resetGame()
-        }
+        })
     } else if (showIntermediateScreen) {
         IntermediateScreen(intermediateTimer, wasAnswerCorrect, correctAnswer, playerScore) {
             totalScore += playerScore
@@ -69,7 +70,7 @@ fun QuizApp() {
                 showResult = true
             } else {
                 currentQuestionIndex++
-                timer = 15
+                timer = 10
                 intermediateTimer = 3
                 showIntermediateScreen = false
             }
@@ -81,9 +82,9 @@ fun QuizApp() {
             onAnswerSelected = { selectedIndex ->
                 wasAnswerCorrect = selectedIndex == questions[currentQuestionIndex].correctAnswerIndex
                 playerScore = if (wasAnswerCorrect) {
-                    (timer * 1000) / 10 // Calcula a pontuação com base no tempo restante
+                    (timer * 1000) / 10
                 } else {
-                    0 // Se a resposta estiver incorreta, o jogador não recebe pontos
+                    0
                 }
                 correctAnswer = questions[currentQuestionIndex].options[questions[currentQuestionIndex].correctAnswerIndex]
                 showIntermediateScreen = true
