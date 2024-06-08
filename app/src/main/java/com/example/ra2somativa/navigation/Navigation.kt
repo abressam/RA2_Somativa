@@ -5,13 +5,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.ra2somativa.ui.QuizApp
+import com.example.ra2somativa.ui.ResultScreen
 import com.example.ra2somativa.ui.StartScreen
 
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "start_screen") {
         composable("start_screen") {
-            StartScreen() {
+            ResultScreen() {
                 navController.navigate("quiz_screen")
             }
         }

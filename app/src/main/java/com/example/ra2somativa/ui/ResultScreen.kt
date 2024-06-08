@@ -1,107 +1,111 @@
 package com.example.ra2somativa.ui
 
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ra2somativa.feature.data.model.PlayerData
+import androidx.compose.ui.unit.times
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ra2somativa.feature.di.RepositoryProvider
+import com.example.ra2somativa.feature.presentation.PlayerViewModel
+import com.example.ra2somativa.feature.presentation.PlayerViewModelFactory
 import kotlinx.coroutines.delay
 
 @Composable
-fun ResultScreen(onRestart: () -> Unit) {
-    val playerData = PlayerData()
-    val players = remember { playerData.loadPlayers() } // Carrega a lista de jogadores
+fun ResultScreen(
+    playerViewModel: PlayerViewModel = viewModel(
+        factory = PlayerViewModelFactory(RepositoryProvider.providePlayerRepository(LocalContext.current))
+    ),
+    onRestart: () -> Unit
+) {
+    val players by playerViewModel.players.observeAsState(emptyList())
+    val maxScore = players.maxOfOrNull { it.score } ?: 1  // Garantir que maxScore não seja zero
 
-    // Variável para controlar o progresso da barra de progresso
-    val progress by animateFloatAsState(
-        targetValue = players.maxOfOrNull { it.score }?.toFloat() ?: 0f, // Maior score da lista
-        animationSpec = tween(durationMillis = 2500)
-    )
-
-    // Restante do seu código para a tela de resultado, incluindo a exibição dos jogadores e do botão "Recomeçar"
-    Column(
+    LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth()
+            .padding(16.dp)
     ) {
-        Text(
-            text = "Ranking",
-            fontSize = 24.sp,
-            color = MaterialTheme.colors.onBackground
-        )
-
-        // Lista de jogadores com diferentes valores de pontuação
-        players.forEach { player ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = player.nickname, // Nome do jogador
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colors.onSurface
-                )
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Barra de progresso ocupando apenas o espaço necessário
-                    Box(
-                        modifier = Modifier
-                            .width(200.dp) // Largura fixa da barra de progresso
-                            .height(16.dp) // Altura da barra de progresso
-                    ) {
-                        LinearProgressIndicator(
-                            progress = progress / 15000f, // Progresso da barra de progresso
-                            modifier = Modifier.fillMaxSize(),
-                            color = Color.Green // Cor da barra de progresso
-                        )
-                    }
-
-                    // Número do score ao final da barra
-                    Text(
-                        text = player.score.toString(),
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colors.onSurface,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
-                }
-            }
+        // Adiciona as barras expansíveis
+        itemsIndexed(players) { index, player ->
+            ExpandingRectangle(index + 1, player.nickname, player.score, maxScore)
         }
-
-        // Botão "Recomeçar" no final da tela
-        Button(
-            onClick = onRestart,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Recomeçar", fontSize = 18.sp)
+        // Adiciona o botão "Recomeçar"
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = onRestart,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Recomeçar", fontSize = 18.sp)
+            }
         }
     }
 }
 
+@Composable
+fun ExpandingRectangle(position: Int, nickname: String, score: Int, maxScore: Int) {
+    var expanded by remember { mutableStateOf(false) }
 
+    LaunchedEffect(Unit) {
+        delay(300)  // Optionally, delay the start of the animation
+        expanded = true
+    }
+
+    val targetWidth = (score.toFloat() / maxScore) * 180.dp
+
+    val width by animateDpAsState(
+        targetValue = if (expanded) targetWidth else 0.dp,
+        animationSpec = tween(durationMillis = 1500),
+        label = ""
+    )
+
+    val animatedScore by animateIntAsState(
+        targetValue = if (expanded) score else 0,
+        animationSpec = tween(durationMillis = 1500),
+        label = ""
+    )
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(vertical = 15.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = "${position}º",
+            fontSize = 14.sp,
+            modifier = Modifier.width(20.dp)
+        )
+        Text(
+            text = nickname,
+            fontSize = 14.sp,
+            modifier = Modifier.width(60.dp)
+        )
+        Box(
+            modifier = Modifier
+                .background(Color.Blue)
+                .width(width)
+                .height(15.dp)
+        )
+        Spacer(modifier = Modifier.width(2.dp))
+        Text(
+            text = "$animatedScore pts",
+            fontSize = 12.sp,
+            modifier = Modifier.padding(start = 8.dp)
+        )
+    }
+}

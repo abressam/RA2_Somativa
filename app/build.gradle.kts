@@ -76,17 +76,14 @@ dependencies {
 
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     androidTestImplementation("androidx.room:room-testing:2.6.1")
-
-    // retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 
     // viewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.1")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.7")
     implementation("androidx.activity:activity-ktx:1.9.0")
 
     // Coil
@@ -98,5 +95,8 @@ dependencies {
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
+
+    // Gson
+    implementation("com.google.code.gson:gson:2.10")
 
 }
