@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.ra2somativa.ui.theme.*
 
 @Composable
 fun AnswerGrid(answers: List<String>, onAnswerSelected: (Int) -> Unit) {
@@ -28,10 +29,10 @@ fun AnswerGrid(answers: List<String>, onAnswerSelected: (Int) -> Unit) {
                         answer = answer,
                         modifier = Modifier.weight(1f),
                         backgroundColor = when (index) {
-                            0 -> Color.Red
-                            1 -> Color.Cyan
-                            2 -> Color.Green
-                            3 -> Color.Yellow
+                            0 -> option1
+                            1 -> option2
+                            2 -> option3
+                            3 -> option4
                             else -> Color.LightGray
                         }
                     ) {

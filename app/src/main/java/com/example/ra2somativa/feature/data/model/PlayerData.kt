@@ -1,7 +1,7 @@
-//package com.example.ra2somativa.feature.data.model
-//
-//class PlayerData {
-//    fun loadPlayers(): List<Player> = listOf(
+package com.example.ra2somativa.feature.data.model
+
+class PlayerData {
+    fun loadPlayers(): List<Player> = listOf(
 //        Player(
 //            nickname = "Caio",
 //            score = 1700
@@ -26,5 +26,5 @@
 //            nickname = "Jorge",
 //            score = 7700
 //        )
-//    )
-//}
+    )
+}

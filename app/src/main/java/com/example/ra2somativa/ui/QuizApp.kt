@@ -25,6 +25,7 @@ fun QuizApp(player: Player, playerViewModel: PlayerViewModel) {
     var correctAnswer by remember { mutableStateOf("") }
     var playerScore by remember { mutableIntStateOf(1000) }
     var totalScore by remember { mutableIntStateOf(0) }
+    var higherScore by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(Unit) {
         questions = questions.shuffled().map { it.randomizeOptions() }
@@ -61,18 +62,21 @@ fun QuizApp(player: Player, playerViewModel: PlayerViewModel) {
         }
     }
 
-    Log.d("User_Object", "User object: $player")
-    Log.d("User_Object", "Valor do Score: $totalScore")
-
     if (showResult) {
-        ResultScreen(playerViewModel, onRestart = {
+        ResultScreen(
+            playerViewModel,
+            player.nickname,
+            onRestart = {
             resetGame()
         })
     } else if (showIntermediateScreen) {
         IntermediateScreen(intermediateTimer, wasAnswerCorrect, correctAnswer, playerScore) {
             totalScore += playerScore
 
-            playerViewModel.updatePlayerScore(player.nickname, totalScore)
+            if (totalScore > higherScore) {
+                higherScore = totalScore
+                playerViewModel.updatePlayerScore(player.nickname, higherScore)
+            }
 
             if (currentQuestionIndex == questions.size - 1) {
                 showResult = true
