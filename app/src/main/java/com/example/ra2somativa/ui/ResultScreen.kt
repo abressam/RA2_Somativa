@@ -26,9 +26,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun ResultScreen(
-    playerViewModel: PlayerViewModel = viewModel(
-        factory = PlayerViewModelFactory(RepositoryProvider.providePlayerRepository(LocalContext.current))
-    ),
+    playerViewModel: PlayerViewModel,
     onRestart: () -> Unit
 ) {
     val players by playerViewModel.players.observeAsState(emptyList())

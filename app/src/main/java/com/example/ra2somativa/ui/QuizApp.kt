@@ -1,5 +1,6 @@
 package com.example.ra2somativa.ui
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -9,10 +10,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.example.ra2somativa.feature.data.model.Player
 import com.example.ra2somativa.feature.data.model.QuestionData
+import com.example.ra2somativa.feature.presentation.PlayerViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun QuizApp() {
+fun QuizApp(player: Player, playerViewModel: PlayerViewModel) {
     var questions by remember { mutableStateOf(QuestionData().loadQuestions()) }
     var currentQuestionIndex by remember { mutableIntStateOf(0) }
     var showResult by remember { mutableStateOf(false) }
@@ -59,13 +61,19 @@ fun QuizApp() {
         }
     }
 
+    Log.d("User_Object", "User object: $player")
+    Log.d("User_Object", "Valor do Score: $totalScore")
+
     if (showResult) {
-        ResultScreen(onRestart = {
+        ResultScreen(playerViewModel, onRestart = {
             resetGame()
         })
     } else if (showIntermediateScreen) {
         IntermediateScreen(intermediateTimer, wasAnswerCorrect, correctAnswer, playerScore) {
             totalScore += playerScore
+
+            playerViewModel.updatePlayerScore(player.nickname, totalScore)
+
             if (currentQuestionIndex == questions.size - 1) {
                 showResult = true
             } else {

@@ -12,4 +12,20 @@ class PlayerRepository(private val playerDao: PlayerDao) {
         }
     }
 
+    suspend fun insertPlayer(player: Player) {
+        return withContext(Dispatchers.IO) {
+            playerDao.insertPlayer(player)
+        }
+    }
+
+    suspend fun updatePlayer(player: Player) {
+        return withContext(Dispatchers.IO) {
+            playerDao.updatePlayer(player)
+        }
+    }
+
+    suspend fun getPlayerByNickname(nickname: String): Player? {
+        return playerDao.getPlayerByNickname(nickname)
+    }
+
 }

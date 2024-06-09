@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.ra2somativa.feature.data.model.Player
 
 @Dao
@@ -19,6 +20,12 @@ interface PlayerDao {
 
     @Query("DELETE FROM players")
     suspend fun deleteAllPlayers()
+
+    @Update
+    suspend fun updatePlayer(player: Player)
+
+    @Query("SELECT * FROM players WHERE nickname = :nickname")
+    suspend fun getPlayerByNickname(nickname: String): Player?
 }
 
 suspend fun PlayerDao.populateDatabase(players: List<Player>) {

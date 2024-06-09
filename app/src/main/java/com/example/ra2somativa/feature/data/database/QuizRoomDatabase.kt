@@ -11,7 +11,6 @@ import com.example.ra2somativa.feature.data.dao.QuestionDao
 import com.example.ra2somativa.feature.data.dao.populateDatabase
 import com.example.ra2somativa.feature.data.model.Converters
 import com.example.ra2somativa.feature.data.model.Player
-import com.example.ra2somativa.feature.data.model.PlayerData
 import com.example.ra2somativa.feature.data.model.Question
 import com.example.ra2somativa.feature.data.model.QuestionData
 import kotlinx.coroutines.CoroutineScope
@@ -35,27 +34,27 @@ abstract class QuizRoomDatabase : RoomDatabase() {
                     QuizRoomDatabase::class.java,
                     "app_database"
                 )
-                    .addCallback(PlayerDatabaseCallback(context))
+//                    .addCallback(PlayerDatabaseCallback(context))
                     .build()
                 INSTANCE = instance
                 instance
             }
         }
 
-        private class PlayerDatabaseCallback(
-            private val context: Context
-        ) : RoomDatabase.Callback() {
-            override fun onCreate(db: SupportSQLiteDatabase) {
-                super.onCreate(db)
-                CoroutineScope(Dispatchers.IO).launch {
-                    val players = PlayerData().loadPlayers()
-                    val questions = QuestionData().loadQuestions()
-
-                    getDatabase(context).playerDao().populateDatabase(players)
-                    getDatabase(context).questionDao().populateDatabase(questions)
-
-                }
-            }
-        }
+//        private class PlayerDatabaseCallback(
+//            private val context: Context
+//        ) : RoomDatabase.Callback() {
+//            override fun onCreate(db: SupportSQLiteDatabase) {
+//                super.onCreate(db)
+//                CoroutineScope(Dispatchers.IO).launch {
+//                    val players = PlayerData().loadPlayers()
+//                    val questions = QuestionData().loadQuestions()
+//
+//                    getDatabase(context).playerDao().populateDatabase(players)
+//                    getDatabase(context).questionDao().populateDatabase(questions)
+//
+//                }
+//            }
+//        }
     }
 }

@@ -11,8 +11,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -21,10 +22,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ra2somativa.feature.data.model.Player
+import com.example.ra2somativa.feature.presentation.PlayerViewModel
 
 @Composable
-fun StartScreen(onStartClick: (String) -> Unit) {
+fun StartScreen(
+    playerViewModel: PlayerViewModel,
+    onStartClick: (Player) -> Unit
+) {
     var nickname by remember { mutableStateOf("") }
+    val addedPlayer by playerViewModel.addedPlayer.observeAsState()
+
+    LaunchedEffect(addedPlayer) {
+        addedPlayer?.let {
+            onStartClick(it)
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -48,7 +61,9 @@ fun StartScreen(onStartClick: (String) -> Unit) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { onStartClick(nickname) },
+            onClick = {
+                    playerViewModel.addPlayer(nickname)
+                },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Começar a Jogar", fontSize = 18.sp)
