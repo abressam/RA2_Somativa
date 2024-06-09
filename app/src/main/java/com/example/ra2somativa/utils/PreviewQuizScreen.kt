@@ -14,7 +14,8 @@ fun PreviewQuizScreen() {
         questionText = "Em qual país está localizado o Palácio de Potala?",
         options = listOf("Coréia do Norte", "Turquia", "Rússia", "China"),
         correctAnswerIndex = 3,
-        imageUrl = "https://images.pexels.com/photos/8604524/pexels-photo-8604524.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        imageUrl = "https://images.pexels.com/photos/8604524/pexels-photo-8604524.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        tips = listOf("Tóquio", "Arroz", "Terremotos")
     )
     RA2SomativaTheme {
         QuizScreen(question = sampleQuestion, timer = 10) {}

@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
@@ -58,7 +59,11 @@ fun ResultScreen(
                 colors = ButtonDefaults.buttonColors(backgroundColor = button),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Recomeçar", fontSize = 18.sp)
+                Text(
+                    text = "Recomeçar",
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
@@ -68,8 +73,8 @@ fun ResultScreen(
 fun ExpandingRectangle(position: Int, nickname: String, score: Int, maxScore: Int, currentUserNickname: String) {
     var expanded by remember { mutableStateOf(false) }
 
-    val displayedNickname = if (nickname.length > 4) {
-        nickname.take(4) + "..." // Adiciona "..." ao final do apelido
+    val displayedNickname = if (nickname.length > 10) {
+        nickname.take(10) + "..." // Adiciona "..." ao final do apelido
     } else {
         nickname // Mantém o apelido original
     }
@@ -79,7 +84,7 @@ fun ExpandingRectangle(position: Int, nickname: String, score: Int, maxScore: In
         expanded = true
     }
 
-    val targetWidth = (score.toFloat() / maxScore) * 180.dp
+    val targetWidth = (score.toFloat() / maxScore) * 130.dp
 
     val width by animateDpAsState(
         targetValue = if (expanded) targetWidth else 0.dp,
@@ -118,7 +123,7 @@ fun ExpandingRectangle(position: Int, nickname: String, score: Int, maxScore: In
         Text(
             text = displayedNickname,
             fontSize = 14.sp,
-            modifier = Modifier.width(60.dp)
+            modifier = Modifier.width(120.dp)
         )
         Box(
             modifier = Modifier
