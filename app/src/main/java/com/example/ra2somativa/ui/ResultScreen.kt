@@ -1,6 +1,7 @@
 package com.example.ra2somativa.ui
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
@@ -16,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,6 +37,14 @@ fun ResultScreen(
 ) {
     val players by playerViewModel.players.observeAsState(emptyList())
     val maxScore = players.maxOfOrNull { it.score } ?: 1  // Garantir que maxScore não seja zero
+    val context = LocalContext.current
+
+    LaunchedEffect(players) {
+        val currentPlayerIndex = players.indexOfFirst { it.nickname == currentUserNickname }
+        if (currentPlayerIndex >= 10) {
+            Toast.makeText(context, "Sua posição: ${currentPlayerIndex + 1}", Toast.LENGTH_LONG).show()
+        }
+    }
 
     LazyColumn(
         modifier = Modifier

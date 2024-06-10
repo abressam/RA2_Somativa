@@ -29,6 +29,6 @@ interface PlayerDao {
 }
 
 suspend fun PlayerDao.populateDatabase(players: List<Player>) {
-    deleteAllPlayers()  // Limpa os dados antigos (opcional)
+    deleteAllPlayers()
     listPlayers(players)
 }

@@ -1,5 +1,6 @@
 package com.example.ra2somativa.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.example.ra2somativa.ui.theme.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -48,6 +50,7 @@ fun StartScreen(
 ) {
     var nickname by remember { mutableStateOf("") }
     val addedPlayer by playerViewModel.addedPlayer.observeAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(addedPlayer) {
         addedPlayer?.let {
@@ -96,12 +99,17 @@ fun StartScreen(
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     capitalization = KeyboardCapitalization.Words,
-                    imeAction = ImeAction.Done // Mudar o rótulo do botão Enter para "Concluído"
+                    imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(
-                    onDone = { // Adicionar uma ação ao pressionar "Concluído"
+                    onDone = {
                         if (nickname.isNotEmpty()) {
-                            playerViewModel.addPlayer(nickname)
+                            playerViewModel.addPlayer(
+                                nickname,
+                                onError = { errorMessage ->
+                                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                                }
+                            )
                         }
                     }
                 ),
@@ -118,7 +126,14 @@ fun StartScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-                    playerViewModel.addPlayer(nickname)
+                    if (nickname.isNotEmpty()) {
+                        playerViewModel.addPlayer(
+                            nickname,
+                            onError = { errorMessage ->
+                                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = button),
                 modifier = Modifier

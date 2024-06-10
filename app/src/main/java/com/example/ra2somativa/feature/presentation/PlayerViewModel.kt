@@ -27,12 +27,15 @@ class PlayerViewModel(private val repository: PlayerRepository) : ViewModel() {
         }
     }
 
-     fun addPlayer(nickname: String) {
+    fun addPlayer(nickname: String, onError: (String) -> Unit) {
         viewModelScope.launch {
-            val player = Player(nickname = nickname, score = 0, higherScore = 0)
-            repository.insertPlayer(player)
-            fetchPlayers()
-            _addedPlayer.value = player
+            if (repository.getPlayerByNickname(nickname) == null) {
+                val newPlayer = Player(nickname = nickname, score = 0, higherScore = 0)
+                repository.insertPlayer(newPlayer)
+                _addedPlayer.value = newPlayer
+            } else {
+                onError("Nickname já cadastrado. Por favor, escolha outro.")
+            }
         }
     }
 

@@ -51,7 +51,7 @@ fun InstructionScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "3º - Você pode fazer até 1000 pontos em cada pergunta caso acertar a resposta certa, os pontos são proporcionais ao tempo, então a cada segundo são descontados -100 pontos;",
+            text = "3º - Você pode fazer até 1000 pontos em cada pergunta caso acerte a resposta. Os pontos são proporcionais ao tempo, então a cada segundo são descontados 100 pontos;",
             fontSize = 14.sp,
             textAlign = TextAlign.Justify
         )
@@ -89,7 +89,8 @@ fun InstructionScreen(
         Text(
             text = "9º - Boa sorte!",
             fontSize = 14.sp,
-            textAlign = TextAlign.Left
+            textAlign = TextAlign.Left,
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(30.dp))
         Button(
