@@ -1,7 +1,10 @@
 package com.example.ra2somativa.ui
 
 import android.widget.Toast
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -24,11 +29,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.ra2somativa.ui.theme.*
@@ -100,16 +108,57 @@ fun QuizScreen(question: Question, timer: Int, onAnswerSelected: (Int) -> Unit) 
             color = MaterialTheme.colors.onBackground
         )
         Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            text = "Tempo restante: $timer segundos",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colors.onBackground
-        )
+        TimeRectangle(totalTime = timer)
         Spacer(modifier = Modifier.height(24.dp))
         AnswerGrid(
             answers = question.options,
             onAnswerSelected = onAnswerSelected
         )
+    }
+}
+
+@Composable
+fun TimeRectangle(totalTime: Int) {
+    var expanded by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        expanded = true
+    }
+
+    val maxWidth = 300.dp  // Largura máxima da barra de tempo
+
+    val width by animateDpAsState(
+        targetValue = if (expanded) 0.dp else maxWidth,
+        animationSpec = tween(durationMillis = totalTime * 1000),  // Duração da animação em milissegundos
+        label = ""
+    )
+
+    val color = calculateColor(width)
+
+    Box(
+        modifier = Modifier
+            .background(color)
+            .width(width)
+            .height(15.dp)
+            .clip(RoundedCornerShape(16.dp))
+    )
+}
+
+@Composable
+fun calculateColor(currentWidth: Dp): Color {
+    val green = Color(0, 255, 0)
+    val yellow = Color(255, 255, 0)
+    val red = Color(255, 0, 0)
+
+    return when {
+        currentWidth >= 200.dp -> {
+            green
+        }
+        currentWidth >= 100.dp -> {
+            lerp(yellow, green, (currentWidth - 100.dp) / 100.dp)
+        }
+        else -> {
+            lerp(red, yellow, currentWidth / 100.dp)
+        }
     }
 }

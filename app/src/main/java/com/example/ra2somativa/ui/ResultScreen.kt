@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import androidx.navigation.NavHostController
+import com.example.ra2somativa.feature.data.model.Player
 import com.example.ra2somativa.feature.presentation.PlayerViewModel
 import kotlinx.coroutines.delay
 import com.example.ra2somativa.ui.theme.*
@@ -46,11 +47,13 @@ fun ResultScreen(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
             )
         }
         // Adiciona as barras expansíveis
-        itemsIndexed(players) { index, player ->
+        itemsIndexed(players.take(10)) { index, player ->
             ExpandingRectangle(index + 1, player.nickname, player.score, maxScore, currentUserNickname)
         }
         // Adiciona o botão "Recomeçar"
@@ -126,8 +129,8 @@ fun ExpandingRectangle(position: Int, nickname: String, score: Int, maxScore: In
         Text(
             text = displayedNickname,
             fontSize = 14.sp,
-            modifier = Modifier.width(80.dp)
-                .padding(end = 12.dp)
+            modifier = Modifier.width(100.dp)
+                .padding(end = 6.dp)
         )
         Box(
             modifier = Modifier

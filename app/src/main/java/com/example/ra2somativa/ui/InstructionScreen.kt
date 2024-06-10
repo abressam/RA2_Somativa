@@ -45,7 +45,7 @@ fun InstructionScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "2º - Ao iniciar o jogo, você terá 10 segundos para selecionar uma das 4 opções de resposta;",
+            text = "2º - Ao iniciar o jogo, você terá 10 segundos (representado pela barra que troca de cor) para selecionar uma das 4 opções de resposta;",
             fontSize = 14.sp,
             textAlign = TextAlign.Justify
         )
