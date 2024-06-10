@@ -38,14 +38,11 @@ class PlayerViewModel(private val repository: PlayerRepository) : ViewModel() {
 
     fun updatePlayerScore(nickname: String, newScore: Int) {
         viewModelScope.launch {
-            // Buscar o jogador pelo nickname
             val player = repository.getPlayerByNickname(nickname)
-            // Verificar se o jogador foi encontrado
             if (player != null) {
                 // Atualizar o score do jogador
                 val updatedPlayer = player.copy(score = newScore)
                 repository.updatePlayer(updatedPlayer)
-                // Atualizar a lista de jogadores (opcional)
                 fetchPlayers()
             } else {
                 Log.e("PlayerViewModel", "Player not found with nickname: $nickname")
@@ -54,7 +51,6 @@ class PlayerViewModel(private val repository: PlayerRepository) : ViewModel() {
     }
 }
 
-// Factory para criar o ViewModel
 class PlayerViewModelFactory(private val repository: PlayerRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PlayerViewModel::class.java)) {
