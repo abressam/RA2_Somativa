@@ -12,20 +12,22 @@ import com.example.ra2somativa.feature.data.model.Player
 import com.example.ra2somativa.feature.di.RepositoryProvider
 import com.example.ra2somativa.feature.presentation.PlayerViewModel
 import com.example.ra2somativa.feature.presentation.PlayerViewModelFactory
+import com.example.ra2somativa.ui.InstructionScreen
 import com.example.ra2somativa.ui.QuizApp
+import com.example.ra2somativa.ui.ResultScreen
 import com.example.ra2somativa.ui.StartScreen
 import com.google.gson.Gson
 
 @Composable
 fun Navigation(navController: NavHostController) {
     val context = LocalContext.current
-    val playerViewModel: PlayerViewModel = viewModel(
-        factory = PlayerViewModelFactory(RepositoryProvider.providePlayerRepository(context))
-    )
 
     NavHost(navController = navController, startDestination = "start_screen") {
         composable("start_screen") {
-            StartScreen(playerViewModel) { player ->
+            val playerViewModel: PlayerViewModel = viewModel(
+                factory = PlayerViewModelFactory(RepositoryProvider.providePlayerRepository(context))
+            )
+            StartScreen(navController, playerViewModel) { player ->
                 val playerJson = Gson().toJson(player)
                 navController.navigate("quiz_screen/$playerJson")
             }
@@ -36,7 +38,20 @@ fun Navigation(navController: NavHostController) {
         ) { backStackEntry ->
             val playerJson = backStackEntry.arguments?.getString("player") ?: ""
             val player = Gson().fromJson(playerJson, Player::class.java)
-            QuizApp(player, playerViewModel)
+            val playerViewModel: PlayerViewModel = viewModel(
+                factory = PlayerViewModelFactory(RepositoryProvider.providePlayerRepository(context))
+            )
+            QuizApp(player, playerViewModel, navController)
+        }
+        composable("instruction_screen") {
+            InstructionScreen(navController)
+        }
+
+        composable("result_screen") {
+            val playerViewModel: PlayerViewModel = viewModel(
+                factory = PlayerViewModelFactory(RepositoryProvider.providePlayerRepository(context))
+            )
+            ResultScreen(navController, playerViewModel, "")
         }
     }
 }

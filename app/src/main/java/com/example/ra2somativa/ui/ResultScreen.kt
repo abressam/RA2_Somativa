@@ -21,15 +21,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
+import androidx.navigation.NavHostController
 import com.example.ra2somativa.feature.presentation.PlayerViewModel
 import kotlinx.coroutines.delay
 import com.example.ra2somativa.ui.theme.*
 
 @Composable
 fun ResultScreen(
+    navController: NavHostController,
     playerViewModel: PlayerViewModel,
-    currentUserNickname: String,
-    onRestart: () -> Unit
+    currentUserNickname: String
 ) {
     val players by playerViewModel.players.observeAsState(emptyList())
     val maxScore = players.maxOfOrNull { it.score } ?: 1  // Garantir que maxScore não seja zero
@@ -44,6 +45,7 @@ fun ResultScreen(
                 text = "Ranking",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
         }
@@ -55,12 +57,16 @@ fun ResultScreen(
         item {
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = onRestart,
+                onClick = {
+                    navController.navigate("start_screen") {
+                        popUpTo("start_screen") { inclusive = true }
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(backgroundColor = button),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Recomeçar",
+                    text = "Voltar",
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center
                 )
@@ -74,7 +80,7 @@ fun ExpandingRectangle(position: Int, nickname: String, score: Int, maxScore: In
     var expanded by remember { mutableStateOf(false) }
 
     val displayedNickname = if (nickname.length > 10) {
-        nickname.take(10) + "..." // Adiciona "..." ao final do apelido
+        nickname.take(8) + "..." // Adiciona "..." ao final do apelido
     } else {
         nickname // Mantém o apelido original
     }
@@ -98,9 +104,6 @@ fun ExpandingRectangle(position: Int, nickname: String, score: Int, maxScore: In
         label = ""
     )
 
-    Log.d("User_Object", "nickname: $nickname")
-    Log.d("User_Object", "currentUserNickname: $currentUserNickname")
-
     val backgroundColor = if (nickname == currentUserNickname) {
         currentPlayer // Cor para o usuário atual
     } else {
@@ -118,12 +121,13 @@ fun ExpandingRectangle(position: Int, nickname: String, score: Int, maxScore: In
         Text(
             text = "${position}º",
             fontSize = 14.sp,
-            modifier = Modifier.width(20.dp)
+            modifier = Modifier.width(30.dp)
         )
         Text(
             text = displayedNickname,
             fontSize = 14.sp,
-            modifier = Modifier.width(120.dp)
+            modifier = Modifier.width(80.dp)
+                .padding(end = 12.dp)
         )
         Box(
             modifier = Modifier

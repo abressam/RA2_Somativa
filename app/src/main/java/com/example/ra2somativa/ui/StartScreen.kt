@@ -36,11 +36,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.ra2somativa.feature.data.model.Player
 import com.example.ra2somativa.feature.presentation.PlayerViewModel
 
 @Composable
 fun StartScreen(
+    navController: NavHostController,
     playerViewModel: PlayerViewModel,
     onStartClick: (Player) -> Unit
 ) {
@@ -124,6 +126,26 @@ fun StartScreen(
                 enabled = nickname.isNotEmpty()
             ) {
                 Text(text = "Começar a Jogar", fontSize = 18.sp)
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = {
+                    navController.navigate("instruction_screen")
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = option1),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Instruções", fontSize = 18.sp)
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = {
+                    navController.navigate("result_screen")
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = option4),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Ranking", fontSize = 18.sp)
             }
         }
     }

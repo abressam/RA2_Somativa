@@ -1,6 +1,5 @@
 package com.example.ra2somativa.ui
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -8,13 +7,16 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.navigation.NavHostController
 import com.example.ra2somativa.feature.data.model.Player
 import com.example.ra2somativa.feature.data.model.QuestionData
 import com.example.ra2somativa.feature.presentation.PlayerViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun QuizApp(player: Player, playerViewModel: PlayerViewModel) {
+fun QuizApp(player: Player,
+            playerViewModel: PlayerViewModel,
+            navController: NavHostController) {
     var questions by remember { mutableStateOf(QuestionData().loadQuestions()) }
     var currentQuestionIndex by remember { mutableIntStateOf(0) }
     var showResult by remember { mutableStateOf(false) }
@@ -64,11 +66,10 @@ fun QuizApp(player: Player, playerViewModel: PlayerViewModel) {
 
     if (showResult) {
         ResultScreen(
-            playerViewModel,
-            player.nickname,
-            onRestart = {
-            resetGame()
-        })
+            navController = navController,
+            playerViewModel = playerViewModel,
+            currentUserNickname = player.nickname,
+        )
     } else if (showIntermediateScreen) {
         IntermediateScreen(intermediateTimer, wasAnswerCorrect, correctAnswer, playerScore) {
             totalScore += playerScore
