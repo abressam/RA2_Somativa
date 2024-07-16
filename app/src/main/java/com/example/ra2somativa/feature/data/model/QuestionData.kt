@@ -60,7 +60,7 @@ class QuestionData {
         ),
         Question(
             questionText = "Em qual país está localizado a Ópera de Sydney?",
-            options = listOf("Emirados Árabes Unidos", "Austrália", "Austria", "Marrocos"),
+            options = listOf("Emirados Árabes Unidos", "Austrália", "Áustria", "Marrocos"),
             correctAnswerIndex = 1,
             imageUrl = "https://images.pexels.com/photos/1878293/pexels-photo-1878293.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
             tips = listOf("Cangoroo", "Coala", "Banda Men at Work")
