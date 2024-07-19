@@ -92,6 +92,7 @@ fun QuizApp(player: Player,
         QuizScreen(
             question = questions[currentQuestionIndex],
             timer = timer,
+            navController = navController,
             onAnswerSelected = { selectedIndex ->
                 wasAnswerCorrect = selectedIndex == questions[currentQuestionIndex].correctAnswerIndex
                 playerScore = if (wasAnswerCorrect) {

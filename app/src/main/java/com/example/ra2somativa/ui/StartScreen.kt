@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.ra2somativa.feature.data.model.Player
 import com.example.ra2somativa.feature.presentation.PlayerViewModel
+import com.example.ra2somativa.ui.button.ExitButton
+import kotlin.system.exitProcess
 
 @Composable
 fun StartScreen(
@@ -61,7 +63,7 @@ fun StartScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = backgroundScreen, shape = RoundedCornerShape(16.dp))
+            .background(color = backgroundScreen)
             .padding(16.dp)
     ) {
         Column(
@@ -138,7 +140,8 @@ fun StartScreen(
                 colors = ButtonDefaults.buttonColors(backgroundColor = button),
                 modifier = Modifier
                     .fillMaxWidth(),
-                enabled = nickname.isNotEmpty()
+                enabled = nickname.isNotEmpty(),
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text(text = "Começar a Jogar", fontSize = 18.sp)
             }
@@ -148,7 +151,8 @@ fun StartScreen(
                     navController.navigate("instruction_screen")
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = option1),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text(text = "Instruções", fontSize = 18.sp)
             }
@@ -158,11 +162,23 @@ fun StartScreen(
                     navController.navigate("result_screen")
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = option4),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text(text = "Ranking", fontSize = 18.sp)
             }
         }
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        ExitButton(
+            modifier = Modifier.fillMaxWidth(),
+            context = context
+        )
     }
 }
 

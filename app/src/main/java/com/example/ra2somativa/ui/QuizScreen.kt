@@ -1,5 +1,6 @@
 package com.example.ra2somativa.ui
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -38,14 +39,16 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.ra2somativa.ui.theme.*
 
 import com.example.ra2somativa.feature.data.model.Question
+import com.example.ra2somativa.ui.button.ExitGameScreenButton
 import kotlinx.coroutines.delay
 
 @Composable
-fun QuizScreen(question: Question, timer: Int, onAnswerSelected: (Int) -> Unit) {
+fun QuizScreen(question: Question, timer: Int, navController: NavHostController, onAnswerSelected: (Int) -> Unit) {
     var timeLeft by remember { mutableIntStateOf(timer) }
     val isAnswered by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -57,6 +60,7 @@ fun QuizScreen(question: Question, timer: Int, onAnswerSelected: (Int) -> Unit) 
             timeLeft--
         }
         if (timeLeft == 0 && !isAnswered) {
+            Log.d("QuizScreen", "Time is up. Navigating to next screen.")
             onAnswerSelected(-1) // If the timer runs out, treat as no answer
         }
     }
@@ -79,6 +83,12 @@ fun QuizScreen(question: Question, timer: Int, onAnswerSelected: (Int) -> Unit) 
                     .fillMaxWidth()
                     .height(200.dp),
                 contentScale = ContentScale.Crop
+            )
+            ExitGameScreenButton(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(8.dp),
+                navController = navController
             )
             FloatingActionButton(
                 onClick = {

@@ -1,6 +1,7 @@
-package com.example.ra2somativa.ui
+package com.example.ra2somativa.ui.button
 
-import androidx.compose.foundation.layout.fillMaxHeight
+import android.app.Activity
+import android.content.Context
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -13,22 +14,29 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ra2somativa.ui.theme.option2
+import kotlin.system.exitProcess
 
+fun exitApp(context: Context) {
+    if (context is Activity) {
+        context.finishAffinity()
+        exitProcess(0)
+    }
+}
 @Composable
-fun AnswerButton(answer: String, modifier: Modifier = Modifier, backgroundColor: Color, onClick: () -> Unit) {
+fun ExitButton(modifier: Modifier = Modifier, context: Context) {
     Button(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor, contentColor = Color.LightGray),
+        onClick = { exitApp(context) },
+        colors = ButtonDefaults.buttonColors(backgroundColor = option2),
         shape = RoundedCornerShape(8.dp),
         modifier = modifier
-            .fillMaxHeight()
+            .fillMaxWidth()
     ) {
         Text(
-            text = answer,
+            text = "Sair",
             fontSize = 18.sp,
             color = Color.Black,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
             style = TextStyle(
                 lineHeight = 24.sp
             )

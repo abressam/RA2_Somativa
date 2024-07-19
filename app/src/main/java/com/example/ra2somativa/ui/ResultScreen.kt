@@ -41,49 +41,67 @@ fun ResultScreen(
 
     LaunchedEffect(players) {
         val currentPlayerIndex = players.indexOfFirst { it.nickname == currentUserNickname }
+        
         if (currentPlayerIndex >= 10) {
             Toast.makeText(context, "Sua posição: ${currentPlayerIndex + 1}", Toast.LENGTH_LONG).show()
         }
     }
 
-    LazyColumn(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        item {
-            Text(
-                text = "Ranking",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth()
-            )
-        }
-        // Adiciona as barras expansíveis
-        itemsIndexed(players.take(10)) { index, player ->
-            ExpandingRectangle(index + 1, player.nickname, player.score, maxScore, currentUserNickname)
-        }
-        // Adiciona o botão "Recomeçar"
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = {
-                    navController.navigate("start_screen") {
-                        popUpTo("start_screen") { inclusive = true }
-                    }
-                },
-                colors = ButtonDefaults.buttonColors(backgroundColor = button),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Voltar",
-                    fontSize = 18.sp,
-                    textAlign = TextAlign.Center
-                )
+        Text(
+            text = "Ranking",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .fillMaxWidth()
+        )
+
+        // LazyColumn para exibir os jogadores
+        LazyColumn(
+            modifier = Modifier.weight(1f)  // Ocupa o espaço disponível restante
+        ) {
+            if (players.isEmpty()) {
+                item {
+                    Text(
+                        text = "Nenhum jogador no pódio",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp)
+                    )
+                }
+            } else {
+                itemsIndexed(players.take(10)) { index, player ->
+                    ExpandingRectangle(index + 1, player.nickname, player.score, maxScore, currentUserNickname)
+                }
             }
+        }
+
+        // Adiciona o botão "Recomeçar" fora do LazyColumn
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = {
+                navController.navigate("start_screen") {
+                    popUpTo("start_screen") { inclusive = true }
+                }
+            },
+            colors = ButtonDefaults.buttonColors(backgroundColor = button),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Voltar",
+                fontSize = 18.sp,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
@@ -139,7 +157,8 @@ fun ExpandingRectangle(position: Int, nickname: String, score: Int, maxScore: In
         Text(
             text = displayedNickname,
             fontSize = 14.sp,
-            modifier = Modifier.width(100.dp)
+            modifier = Modifier
+                .width(100.dp)
                 .padding(end = 6.dp)
         )
         Box(
