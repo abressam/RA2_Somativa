@@ -1,8 +1,9 @@
 package com.example.ra2somativa.ui.button
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -14,23 +15,20 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
 @Composable
-fun ExitGameScreenButton(modifier: Modifier, navController: NavHostController) {
+fun ExitGameScreenButton(modifier: Modifier = Modifier, navController: NavHostController) {
     ExtendedFloatingActionButton(
         onClick = { navController.navigate("result_screen") },
-        text = {
-            Text(
-                text = "Sair",
-                color = Color.White
-            )
-               },
+        text = { Text(text = "Sair", color = Color.White) }, // Define a cor do texto
         icon = {
             Icon(
                 Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Exit game",
-                tint = MaterialTheme.colors.onPrimary
+                tint = Color.White // Define a cor do ícone
             )
         },
+        contentColor = Color.White, // Define a cor do texto e ícone
         modifier = modifier
-            .padding(4.dp) // Ajuste o padding conforme necessário
+            .padding(4.dp)
     )
+
 }
