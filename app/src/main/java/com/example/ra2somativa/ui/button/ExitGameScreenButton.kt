@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,7 +21,7 @@ fun ExitGameScreenButton(modifier: Modifier = Modifier, navController: NavHostCo
         text = { Text(text = "Sair", color = Color.White) }, // Define a cor do texto
         icon = {
             Icon(
-                Icons.AutoMirrored.Filled.ArrowBack,
+                Icons.Filled.ArrowBack,
                 contentDescription = "Exit game",
                 tint = Color.White // Define a cor do ícone
             )
