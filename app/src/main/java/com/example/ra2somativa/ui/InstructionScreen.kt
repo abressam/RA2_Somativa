@@ -87,7 +87,7 @@ fun InstructionScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "9º - Boa sorte!",
+            text = "9º - Aproveite para tentar superar os resultados do ranking! Boa sorte!",
             fontSize = 14.sp,
             textAlign = TextAlign.Left,
             modifier = Modifier.fillMaxWidth()
